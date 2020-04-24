@@ -1,6 +1,6 @@
 class Agent {
 	static lineWidth = [1, 2, 1, 1];
-	static lineColor = [0xdddddd, 0xffff00, 0xff00ff, 0xeeeeee];
+	static lineColor = [0xdddddd, 0xffff00, 0xff00ff, 0x00ff00];
 	static fillColor = [0, 0, 0, 0];
 
 	static average = new Victor();
@@ -14,7 +14,7 @@ class Agent {
 		this.acceleration = new Victor(0, 0);
 
 		this.isNear = false; // near to the first agent
-
+		
 		subdiv.update(this); // update the item in the buckets
 
 		this.show();
@@ -48,7 +48,7 @@ class Agent {
 	}
 
 	limitAvgForce(avg) {
-		// set length
+		// set length/mangnitude
 		avg.norm();
 		avg.x *= maxSpeed;
 		avg.y *= maxSpeed;
@@ -68,10 +68,14 @@ class Agent {
 		avg.x = avg.y = 0;
 		
 		if (agents.length == 0) return avg;
+
+		let diff = new Victor();
 		
 		agents.forEach((a, i) => {
-			const diff = this.position.clone().subtract(a.position);
-			if (dsq[i] !== 0) {
+			diff.x = this.position.x - a.position.x;
+			diff.y = this.position.y - a.position.y;
+			
+			if (dsq[i] > 0) {
 				diff.x /= dsq[i];
 				diff.y /= dsq[i];
 			}
@@ -186,7 +190,7 @@ class Agent {
 	drawShape() {
 		if (this.shape === undefined) {
 			this.shape = new PIXI.Graphics();
-			app.stage.addChild(this.shape);
+			// app.stage.addChild(this.shape);
 		}
 
 		const sState = (this.debug ? 1 : 0) + (this.isNear ? 2 : 0);
