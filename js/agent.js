@@ -130,9 +130,7 @@ class Agent {
 	}
 
 	flocking() {
-		const arrays = this.getNearAgents();
-		const agents = arrays[0];
-		const distancesSq = arrays[1];
+		const [ agents, distancesSq ] = this.getNearAgents();
 
 		this.acceleration.x = this.acceleration.y = 0;
 
